@@ -30,9 +30,15 @@ import BottomNavigation from './components/BottomNavigation'
 import { useCustomTheme } from './hooks'
 import palette from './constants/palette'
 import List from './components/List'
+import Upload from './components/Upload'
+import Switch from './components/Switch'
+import Carousel from './components/Carousel'
 import PullToRefresh from './components/PullToRefresh'
 export {
   List,
+  Upload,
+  Carousel,
+  Switch,
   PullToRefresh,
   Tabs,
   BottomNavigation,
