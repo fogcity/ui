@@ -8,7 +8,7 @@ interface OverlayProps {
   show: boolean
   blur?: boolean
   opacity?: string | number
-  onClick?: (e: any) => any
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   cssOptions?: React.CSSProperties
   className?: string
 }
@@ -23,7 +23,7 @@ const useStyles = createUseStyles<RuleNames, Omit<OverlayProps, 'onClick'>, Them
     bottom: 0,
     right: 0,
     background: color || 'rgba(0,0,0,0.48)',
-    backdropFilter: blur ? 'blur(11px)' : '',
+    backdropFilter: blur ? 'blur(4px)' : '',
     zIndex: theme.zIndex.overlay,
     opacity: 0,
     transition: 'all .4s',
@@ -34,11 +34,11 @@ const useStyles = createUseStyles<RuleNames, Omit<OverlayProps, 'onClick'>, Them
 
 const Overlay = ({ opacity = 1, blur = false, color, show = false, onClick, cssOptions, className }: OverlayProps) => {
   const classes = useStyles({ show, blur, color, opacity, cssOptions })
-  const cns = classnames(classes.overlay, { [`${className}`]: true })
-  const handleClickOverlay = (e: any) => {
+  const computedOverlayClassNames = classnames(classes.overlay, className)
+  const handleClickOverlay = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick?.(e)
   }
-  return <aside className={cns} onClick={handleClickOverlay} />
+  return <aside className={computedOverlayClassNames} onClick={handleClickOverlay} />
 }
 
 export default Overlay

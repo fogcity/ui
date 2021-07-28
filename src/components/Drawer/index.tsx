@@ -187,10 +187,13 @@ const Drawer = ({
 
   return (
     <aside className={computedClassNames} {...props}>
-      {React.cloneElement(children as React.FunctionComponentElement<{ className: string }>, {
-        className: computedChildClassNames,
-      })}
+      {typeof children == 'string'
+        ? children
+        : React.cloneElement(children as React.FunctionComponentElement<{ className: string }>, {
+            className: computedChildClassNames,
+          })}
       <Overlay
+        blur
         show={open}
         onClick={handleClickOverlay}
         cssOptions={{

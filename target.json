@@ -1,24 +1,40 @@
 {
   "@global": {
-    "@keyframes fadein": {
-      "from": {
-        "bottom": "0",
-        "opacity": "0"
-      },
-      "to": {
-        "bottom": 30,
-        "opacity": "1"
-      }
+    ".switch-checkbox": {
+      "height": "0",
+      "width": "0",
+      "visibility": "hidden"
     },
-    "@keyframes fadeout": {
-      "from": {
-        "bottom": 30,
-        "opacity": "1"
-      },
-      "to": {
-        "bottom": "0",
-        "opacity": "0"
-      }
+    ".switch-label": {
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "space-between",
+      "cursor": "pointer",
+      "width": 100,
+      "height": 50,
+      "background": "grey",
+      "borderRadius": 100,
+      "position": "relative",
+      "transition": "background-color 0.2s"
+    },
+    ".switch-label .switch-button": {
+      "content": "''",
+      "position": "absolute",
+      "top": 2,
+      "left": 2,
+      "width": 45,
+      "height": 45,
+      "borderRadius": 45,
+      "transition": "0.2s",
+      "background": "#fff",
+      "boxShadow": "0 0 2px 0 rgba(10, 10, 10, 0.29)"
+    },
+    ".switch-checkbox:checked + .switch-label .switch-button": {
+      "left": "calc(100% - 2px)",
+      "transform": "translateX(-100%)"
+    },
+    ".switch-label:active .switch-button": {
+      "width": 60
     }
   }
 }
