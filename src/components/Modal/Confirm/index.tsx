@@ -1,26 +1,17 @@
-import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import BaseModal, { ModalProps } from '../BaseModal'
 
-export interface ModalFuncProps {
-  className?: string
-  visible?: boolean
-  title?: React.ReactNode
-  content?: React.ReactNode
-  width?: string | number
-  onOk?: (...args: any[]) => any
-  onCancel?: (...args: any[]) => any
-  okText?: React.ReactNode
-  cancelText?: React.ReactNode
-  icon?: React.ReactNode
-  okCancel?: boolean
-  zIndex?: number
-  type?: 'confirm' | 'info' | 'success' | 'warn' | 'error'
+export default function confirm(config: ModalProps) {
+  const div = document.createElement('div')
+  document.body.appendChild(div)
+  config = {
+    ...config,
+    visible: true,
+  }
+  ReactDOM.render(<BaseModal {...config} />, div)
 }
 
-export default function confirm(config: ModalFuncProps) {
-  return <div>hello</div>
-}
-
-export function withConfirm(props: ModalFuncProps): ModalFuncProps {
+export function withConfirm(props: ModalProps): ModalProps {
   return {
     icon: '',
     okCancel: true,
@@ -29,7 +20,7 @@ export function withConfirm(props: ModalFuncProps): ModalFuncProps {
   }
 }
 
-export function withInfo(props: ModalFuncProps): ModalFuncProps {
+export function withInfo(props: ModalProps): ModalProps {
   return {
     icon: '',
     okCancel: false,
@@ -38,7 +29,7 @@ export function withInfo(props: ModalFuncProps): ModalFuncProps {
   }
 }
 
-export function withSuccess(props: ModalFuncProps): ModalFuncProps {
+export function withSuccess(props: ModalProps): ModalProps {
   return {
     icon: '',
     okCancel: false,
@@ -47,7 +38,7 @@ export function withSuccess(props: ModalFuncProps): ModalFuncProps {
   }
 }
 
-export function withWarn(props: ModalFuncProps): ModalFuncProps {
+export function withWarn(props: ModalProps): ModalProps {
   return {
     icon: '',
     okCancel: false,
@@ -56,7 +47,7 @@ export function withWarn(props: ModalFuncProps): ModalFuncProps {
   }
 }
 
-export function withError(props: ModalFuncProps): ModalFuncProps {
+export function withError(props: ModalProps): ModalProps {
   return {
     icon: '',
     okCancel: false,

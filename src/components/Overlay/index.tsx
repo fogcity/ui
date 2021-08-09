@@ -24,7 +24,7 @@ const useStyles = createUseStyles<RuleNames, Omit<OverlayProps, 'onClick'>, Them
     right: 0,
     background: color || 'rgba(0,0,0,0.48)',
     backdropFilter: blur ? 'blur(4px)' : '',
-    zIndex: theme.zIndex.overlay,
+    zIndex: theme.zIndex?.overlay,
     opacity: 0,
     transition: 'all .4s',
     ...(show ? { opacity: opacity } : { display: 'none' }),

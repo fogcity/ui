@@ -24,7 +24,7 @@ const useStyles = createUseStyles<RuleNames, Omit<TimelineProps, 'data'>, Theme>
       content: '""',
       position: 'absolute',
       width: `${lineWidth}px`,
-      backgroundColor: lineColor || theme?.palette?.common?.white || 'white',
+      backgroundColor: lineColor || theme?.color.white || 'white',
       top: '0',
       bottom: '0',
       left: '50%',
