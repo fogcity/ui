@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss'
 type ChipProps = {
   outline?: boolean
   color?: string
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 
 type RuleNames = 'chip'
@@ -27,7 +27,7 @@ const useStyles = createUseStyles<RuleNames, ChipProps, Theme>((theme) => {
         : {
             border: '1px solid ' + getComputedColor(color),
           }),
-      ...cssOptions,
+      ...cssOptions?.(theme),
     }),
   }
 })

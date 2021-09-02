@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
 import * as React from 'react'
 import classnames from 'classnames'
-import { createUseStyles, useTheme } from 'react-jss'
+import Text from './'
+import { createUseStyles } from 'react-jss'
 import { Theme } from '../../constants/theme'
 type ButtonProps = {
   padding?: string
@@ -12,7 +12,7 @@ type ButtonProps = {
   icon?: boolean
   tile?: boolean
   color?: string
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 type RuleNames = 'button'
 
@@ -23,7 +23,7 @@ const useStyles = createUseStyles<RuleNames, ButtonProps, Theme>(
       width: block ? '100%' : 'auto',
       border: outlined ? '1px solid ' + (color || theme?.color?.primary || '#231F9C') : 'none',
       borderRadius: tile ? '0px' : '4px',
-      color: theme.mode == 'light' ? theme.color.white || '#fff' : theme.color.black || '#111827',
+      color: theme ? (theme.mode == 'light' ? theme.color.black : theme.color.white) : '#111827',
       backgroundColor:
         disabled == false
           ? text || outlined || icon
@@ -34,51 +34,44 @@ const useStyles = createUseStyles<RuleNames, ButtonProps, Theme>(
           : theme
           ? theme.color.greyLight
           : '#F3F4F5',
-      ...cssOptions,
+      ...cssOptions?.(theme),
     }),
   }),
   { name: 'Button', classNamePrefix: 'Button' },
 )
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps & React.ComponentPropsWithoutRef<'button'>>(
-  (
-    {
-      block = false,
-      disabled = false,
-      text = false,
-      outlined = false,
-      cssOptions,
-      icon = false,
-      tile = false,
-      color,
-      padding,
-      className,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const theme = useTheme<Theme>()
-    const classes = useStyles({
-      theme,
-      color,
-      block,
-      tile,
-      icon,
-      disabled,
-      text,
-      cssOptions,
-      outlined,
-      padding,
-    })
+const Button = ({
+  block = false,
+  disabled = false,
+  text = false,
+  outlined = false,
+  cssOptions,
+  icon = false,
+  tile = false,
+  color,
+  padding,
+  className,
+  children,
+  ...props
+}: ButtonProps & React.ComponentProps<'button'>) => {
+  const classes = useStyles({
+    color,
+    block,
+    tile,
+    icon,
+    disabled,
+    text,
+    cssOptions,
+    outlined,
+    padding,
+  })
 
-    const computedClassNames = classnames(classes.button, className)
-    return (
-      <button ref={ref} className={computedClassNames} disabled={disabled} {...props}>
-        {children}
-      </button>
-    )
-  },
-)
+  const computedClassNames = classnames(classes.button, className)
+  return (
+    <button className={computedClassNames} disabled={disabled} {...props}>
+      {typeof children == 'string' ? <Text>{children}</Text> : children}
+    </button>
+  )
+}
 
 export default Button

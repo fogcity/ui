@@ -2,45 +2,41 @@ import * as React from 'react'
 import classnames from 'classnames'
 import { Theme } from '../../constants/theme'
 import { createUseStyles } from 'react-jss'
-// 也可也直接用宽高的背景色来实现divider组件
 type DividerProps = {
+  width?: number
   vertical?: boolean
   color?: string
+  doubleLine?: boolean
   dashed?: boolean
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 
 type RuleNames = 'divider'
 
 const useStyles = createUseStyles<RuleNames, DividerProps, Theme>((theme) => ({
-  divider: ({ color, vertical, cssOptions, dashed }) => ({
-    // borderWidth: "thin 0 0",
-
+  divider: ({ color, width, vertical, cssOptions, doubleLine, dashed }) => ({
+    border: 'none',
     ...(vertical
       ? {
           display: 'inline',
-          borderLeft: '1px ' + (dashed ? 'dashed' : 'solid'),
-          width: 0,
-          maxWidth: 0,
-          borderLeftColor: color || theme.color.greyLight,
+          borderLeft: `${width}px ${dashed ? 'dashed' : 'solid'}  ${
+            color || theme ? (theme.mode == 'light' ? theme.color.greyLight : theme.color.grey) : '#F3F4F6'
+          }`,
         }
       : {
-          borderTop: '1px ' + (dashed ? 'dashed' : 'solid'),
-          height: 0,
-          maxHeight: 0,
-          borderTopColor: color || theme.color.greyLight,
+          borderTop: `${width}px ${dashed ? 'dashed' : 'solid'}  ${
+            color || theme ? (theme.mode == 'light' ? theme.color.greyLight : theme.color.grey) : '#F3F4F6'
+          }`,
         }),
-    ...cssOptions,
+    ...cssOptions?.(theme),
   }),
 }))
 
-/**
- * Divider :
- * if vertical == true , must set the cssOptions.height
- */
 const Divider = ({
+  width = 1,
   vertical = false,
   dashed = false,
+  doubleLine = false,
   color,
   cssOptions,
   className,
@@ -51,11 +47,13 @@ const Divider = ({
     vertical,
     dashed,
     color,
+    width,
+    doubleLine,
     cssOptions,
   })
 
   const computedClassNames = classnames(classes.divider, className)
-  return <hr className={computedClassNames} {...props} />
+  return <hr aria-label="hr divider" className={computedClassNames} {...props} />
 }
 
 export default Divider

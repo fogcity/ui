@@ -6,7 +6,7 @@ type SwitchProps = Partial<{
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => any
   on: boolean
   color?: string
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }>
 
 type RuleNames = 'switch'
@@ -18,7 +18,7 @@ const useStyles = createUseStyles<RuleNames, SwitchProps, Theme>((theme) => ({
     justifyContent: 'space-between',
     cursor: 'pointer',
     width: '4em',
-    height: '2em',
+    height: '1.6em',
     background: on ? color || theme.color.primary || '#231F9C' : theme.color.greyLight || '#F3F4F6',
     borderRadius: 100,
     position: 'relative',
@@ -30,9 +30,9 @@ const useStyles = createUseStyles<RuleNames, SwitchProps, Theme>((theme) => ({
     '& > .switch-button': {
       content: "''",
       position: 'absolute',
-      left: on ? `calc(55% - 5%)` : '5%',
-      width: '1.8em',
-      height: '1.8em',
+      left: on ? `calc(65% - 5%)` : '5%',
+      width: '1.4em',
+      height: '1.4em',
       borderRadius: 45,
       transition: '.4s ease-out',
       background: '#fff',
@@ -40,7 +40,7 @@ const useStyles = createUseStyles<RuleNames, SwitchProps, Theme>((theme) => ({
       // transform: on ? 'translateX(60%)' : '',
     },
     '&:active > .switch-button': {
-      width: '3em',
+      // width: '2em',
     },
   }),
 }))

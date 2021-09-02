@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss'
 import { Theme } from '../../constants/theme'
 
 type TextareaProps = {
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 type RuleNames = 'textarea'
 
@@ -14,7 +14,7 @@ const useStyles = createUseStyles<RuleNames, TextareaProps, Theme>((theme) => ({
     padding: '12px',
     backgroundColor: theme ? (theme.mode == 'light' ? theme.color.greyLight : theme.color.white) : 'transparent',
     color: theme ? (theme.mode == 'light' ? theme.color.black : theme.color.white) : '#111827',
-    ...cssOptions,
+    ...cssOptions?.(theme),
   }),
 }))
 

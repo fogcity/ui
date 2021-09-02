@@ -16,37 +16,60 @@ import Progress from './components/Progress'
 import Loading from './components/Loading'
 import Select from './components/Select'
 import Image from './components/Image'
-import Alert from './components/Alert'
 import Timeline from './components/Timeline/Timeline'
 import Collapse from './components/Collapse'
 import Chip from './components/Chip'
-import Snackbar from './components/Snackbar'
+import Notification from './components/Notification'
 import Input from './components/Input'
 import Text from './components/Text'
 import Grid from './components/Grid'
 import Textarea from './components/Textarea'
 import Tabs from './components/Tabs'
-import BottomNavigation from './components/BottomNavigation'
 import { useCustomTheme } from './hooks'
 import palette from './constants/palette'
 import List from './components/List'
 import Upload from './components/Upload'
 import Switch from './components/Switch'
+import Popover from './components/Popover'
+import ScrollView from './components/ScrollView'
+import FloatingWindow from './components/FloatingWindow'
+import Badge from './components/Badge'
 import Carousel from './components/Carousel'
+import Slider from './components/Slider'
+import TimePicker from './components/TimePicker'
+import Footer from './components/Footer'
+import Backscrumbs from './components/Backscrumbs'
+import Banner from './components/Banner'
+import NumberInput from './components/NumberInput'
+import Segment from './components/Segment'
+import DatePicker from './components/DatePicker'
+import MonthPicker from './components/MonthPicker'
 import PullToRefresh from './components/PullToRefresh'
 export {
+  NumberInput,
+  MonthPicker,
+  Footer,
+  DatePicker,
+  Banner,
+  TimePicker,
+  Backscrumbs,
+  Segment,
+  ScrollView,
+  Slider,
+  Badge,
+  Popover,
+  FloatingWindow,
   List,
   Upload,
   Carousel,
   Switch,
   PullToRefresh,
   Tabs,
-  BottomNavigation,
   Image,
   Chip,
   Textarea,
   Input,
-  Snackbar,
+  Notification,
   AppBar,
   Grid,
   Button,
@@ -66,7 +89,6 @@ export {
   Picker,
   Progress,
   Loading,
-  Alert,
   Collapse,
   Timeline,
   useCustomTheme,

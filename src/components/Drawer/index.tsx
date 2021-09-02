@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from 'react-jss'
-import React from 'react'
 import { Theme } from '../../constants/theme'
 import Overlay from '../Overlay'
 
@@ -36,7 +36,7 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
         break
       case 'top':
         from = {
-          top: '-' + height,
+          top: '-' + height == 'auto' ? '100vh' : height,
         }
         to = {
           top: '0',
@@ -44,7 +44,7 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
         break
       case 'bottom':
         from = {
-          bottom: '-' + height,
+          bottom: '-' + height == 'auto' ? '100vh' : height,
         }
         to = {
           bottom: '0',
@@ -77,7 +77,7 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
         break
       case 'top':
         to = {
-          top: '-' + height,
+          top: '-' + height == 'auto' ? '100vh' : height,
         }
         from = {
           top: '0',
@@ -85,7 +85,7 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
         break
       case 'bottom':
         to = {
-          bottom: '-' + height,
+          bottom: '-' + height == 'auto' ? '100vh' : height,
         }
         from = {
           bottom: '0',
@@ -102,16 +102,16 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
   },
   'drawer-content': ({ open, position, width, height }) => {
     let contentStyle = {},
+      closeStyle = {},
       openStyle = {}
-
-    const closeStyle = {}
-    const baseOffset = '-' + height
+    const baseYOffset = height != 'auto' ? height : '-100vh'
+    const baseXOffset = '-' + width
     switch (position) {
       case 'left':
         contentStyle = {
           width: width,
           height: '100%',
-          left: baseOffset,
+          left: baseXOffset,
           top: '0',
           bottom: '0',
         }
@@ -121,7 +121,7 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
         contentStyle = {
           width: width,
           height: '100%',
-          right: baseOffset,
+          right: baseXOffset,
           top: '0',
           bottom: '0',
         }
@@ -133,7 +133,7 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
           height: height,
           left: 0,
           right: 0,
-          top: baseOffset,
+          top: baseYOffset,
         }
         openStyle = { top: 0 }
         break
@@ -143,7 +143,7 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
           height: height,
           left: 0,
           right: 0,
-          bottom: baseOffset,
+          bottom: baseYOffset,
         }
         openStyle = { bottom: 0 }
         break
@@ -154,7 +154,7 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
       position: 'fixed',
       zIndex: theme.zIndex.drawer,
       ...contentStyle,
-      transition: 'all .4s',
+      transition: 'all .3s',
 
       ...(open ? openStyle : { ...closeStyle }),
     }
@@ -165,8 +165,8 @@ const useStyles = createUseStyles<RuleNames, Omit<DrawerProps, 'onClose' | 'shy'
 }))
 
 const Drawer = ({
-  width = '40vh',
-  height = '18em',
+  width = '40vw',
+  height = 'auto',
   position = 'left',
   open = false,
   onClose,
@@ -175,7 +175,7 @@ const Drawer = ({
   children,
   className,
   ...props
-}: DrawerProps & React.ComponentProps<'aside'>) => {
+}: DrawerProps & React.ComponentPropsWithoutRef<'aside'>) => {
   const classes = useStyles({ open, width, height, position })
   const computedClassNames = classnames(classes.drawer)
   const computedChildClassNames = classnames(classes['drawer-content'], className)
@@ -184,21 +184,17 @@ const Drawer = ({
       onClose(e)
     }
   }
-
   return (
     <aside className={computedClassNames} {...props}>
-      {typeof children == 'string'
-        ? children
-        : React.cloneElement(children as React.FunctionComponentElement<{ className: string }>, {
-            className: computedChildClassNames,
-          })}
+      {React.cloneElement(children as React.FunctionComponentElement<{ className: string }>, {
+        className: computedChildClassNames,
+      })}
       <Overlay
-        blur
         show={open}
         onClick={handleClickOverlay}
-        cssOptions={{
+        cssOptions={() => ({
           display: showOverlay ? 'flex' : 'none',
-        }}
+        })}
       />
     </aside>
   )

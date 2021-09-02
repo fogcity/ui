@@ -7,7 +7,7 @@ type CarouselProps = Partial<{
   onChange?: (index: number) => any
   auto?: boolean
   vertical?: boolean
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }>
 
 type RuleNames = 'carousel'
@@ -18,7 +18,7 @@ const useStyles = createUseStyles<RuleNames, CarouselProps, Theme>((theme) => ({
     display: 'flex',
     scrollSnapType: `${vertical ? 'y' : 'x'} mandatory`,
     webkitOverflowScrolling: 'touch',
-    ...cssOptions,
+    ...cssOptions?.(theme),
     '& > *': {
       minWidth: '100%',
       scrollSnapAlign: 'start',
@@ -52,9 +52,6 @@ const Carousel = ({
           onTouchStart: () => handleCarouselChange(i),
         }),
       )}
-      {/* {data?.map((v, i) => (
-        <div onTouchStart={(e) => handleCarouselChange(i)}>{v}</div>
-      ))} */}
     </div>
   )
 }

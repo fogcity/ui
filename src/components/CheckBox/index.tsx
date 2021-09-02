@@ -6,7 +6,7 @@ import { createUseStyles } from 'react-jss'
 import { Theme } from '../../constants/theme'
 
 type CheckBoxProps = {
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
   checkedNode?: React.ReactNode
   uncheckedNode?: React.ReactNode
   contentNode?: React.ReactNode
@@ -21,7 +21,7 @@ const useStyles = createUseStyles<RuleNames, CheckBoxProps, Theme>((theme) => ({
   checkBox: ({ cssOptions }) => ({
     display: 'flex',
     alignItems: 'center',
-    ...cssOptions,
+    ...cssOptions?.(theme),
   }),
 }))
 

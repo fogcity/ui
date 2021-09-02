@@ -13,7 +13,7 @@ type InputProps = {
   suffix?: { node: React.ReactNode; flex: number }
   outline?: boolean
   contain?: boolean
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 type RuleNames = 'input' | 'input-container'
 
@@ -29,7 +29,7 @@ const useStyles = createUseStyles<RuleNames, InputProps & { disabled?: boolean }
     color: disabled ? theme?.color?.grey || '#6b7280' : theme?.color?.black || '#111827',
     outline: outline ? (!disabled ? '1px solid ' + theme?.color?.greyLight : 'none') : 'none',
     borderRadius: '4px',
-    ...cssOptions,
+    ...cssOptions?.(theme),
   }),
   'input-container': ({ cssOptions, disabled, contain }) => ({
     backgroundColor: contain
@@ -37,7 +37,7 @@ const useStyles = createUseStyles<RuleNames, InputProps & { disabled?: boolean }
       : disabled
       ? theme?.color?.greyLight || '#F3F4F6'
       : 'transparent',
-    ...cssOptions,
+    ...cssOptions?.(theme),
   }),
 }))
 

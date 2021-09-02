@@ -3,84 +3,125 @@ import classnames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Theme } from '../../constants/theme'
 type ListProps = {
-  triggerValue?: number
-  onScrollToBottom: (handleScrollToBottomOver: () => any) => any
-  fetchNode?: React.ReactNode
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 
-type RuleNames = 'list'
+type ListItemProps = {
+  swipe?: boolean
+  onSwipe?: () => any
+  onSwipeStart?: () => any
+  onSwipeEnd?: () => any
+  rightContent?: React.ReactNode
+  className?: string
+  children?: React.ReactNode
+  cssOptions?: (theme: Theme) => React.CSSProperties
+}
 
-const useStyles = createUseStyles<RuleNames, Pick<ListProps, 'cssOptions'>, Theme>((theme) => ({
+const useListStyles = createUseStyles<'list', Pick<ListProps, 'cssOptions'>, Theme>((theme) => ({
   list: ({ cssOptions }) => {
     return {
-      height: '100%',
-      overflow: 'auto',
-      ...cssOptions,
+      overflow: 'hidden',
+      ...cssOptions?.(theme),
     }
   },
 }))
-const List = ({
-  fetchNode,
-  triggerValue = 40,
-  onScrollToBottom,
-  cssOptions,
-  className,
-  children,
-  ...props
-}: ListProps & React.ComponentPropsWithoutRef<'div'>) => {
-  const classes = useStyles({
+
+const useListItemStyles = createUseStyles<'list-item', Pick<ListProps, 'cssOptions'> & { translateX: number }, Theme>(
+  (theme) => ({
+    'list-item': ({ cssOptions, translateX }) => {
+      return {
+        position: 'relative',
+        transform: `translate3d(-${translateX}px,0,0)`,
+        transition: 'transform 0.1s cubic-bezier(0.4, 0, 1, 1) 0s',
+        ...cssOptions?.(theme),
+        '& > :nth-child(2)': {
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          transform: 'translate3d(100%,0,0)',
+        },
+      }
+    },
+  }),
+)
+const List = ({ cssOptions, className, children, ...props }: ListProps & React.ComponentPropsWithoutRef<'section'>) => {
+  const classes = useListStyles({
     cssOptions,
   })
 
-  const clsns = classnames(classes.list, className)
-  const [scrollTop, setScrollTop] = useState(0)
-  const [isTouch, setIsTouch] = useState(false)
-  const [isFetching, setIsFetching] = useState(false)
-  const handleScrollToBottomOver = () => {
-    setIsFetching(false)
-  }
-
-  const handleScrollToBottom = () => {
-    onScrollToBottom(handleScrollToBottomOver)
-  }
-
-  const handleScroll = (e: any) => {
-    const element = e.target
-    setScrollTop(element.scrollTop)
-    if (element.scrollTop + element.clientHeight + triggerValue < element.scrollHeight || isFetching) return
-    setIsFetching(true)
-  }
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (scrollTop > 0 && isTouch) e.stopPropagation()
-    setIsTouch(true)
-  }
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (scrollTop > 0 && isTouch) e.stopPropagation()
-  }
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    setIsTouch(false)
-  }
-  useEffect(() => {
-    if (!isFetching) return
-    handleScrollToBottom()
-  }, [isFetching])
+  const computedClassNames = classnames(classes.list, className)
 
   return (
-    <>
-      <div
-        onScroll={handleScroll}
-        onTouchStart={(e) => handleTouchStart(e)}
-        onTouchMove={(e) => handleTouchMove(e)}
-        onTouchEnd={(e) => handleTouchEnd(e)}
-        className={clsns}
-        {...props}
-      >
-        {children}
-      </div>
-      {isFetching && fetchNode}
-    </>
+    <section aria-label="list" role="list" className={computedClassNames} {...props}>
+      {children}
+    </section>
   )
 }
 
+const ListItem = ({
+  swipe,
+  onSwipeStart,
+  rightContent,
+  onSwipe,
+  onSwipeEnd,
+  children,
+  className,
+  cssOptions,
+}: ListItemProps) => {
+  const [swipeLength, setSwipeLength] = useState(0)
+  const [translateX, setTranslateX] = useState(0)
+  const [startX, setStartX] = useState(0)
+  const classes = useListItemStyles({
+    translateX,
+    cssOptions,
+  })
+  const rightContentRef = React.useRef<any>({})
+  const computedClassNames = classnames(classes['list-item'], className)
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setStartX(e.touches[0].pageX)
+    onSwipeStart?.()
+  }
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    length = Math.max(0, parseFloat((startX - e.touches[0].clientX).toFixed(2)))
+    const sl = Math.min(length, rightContentRef.current.clientWidth)
+    setSwipeLength(sl)
+    setTranslateX(sl)
+    onSwipe?.()
+  }
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (swipeLength > rightContentRef.current.clientWidth / 2) {
+      setTranslateX(rightContentRef.current.clientWidth)
+    } else {
+      setTranslateX(0)
+    }
+    setSwipeLength(0)
+    onSwipeEnd?.()
+  }
+
+  const renderRightContent = () => {
+    console.log(
+      React.cloneElement(rightContent as React.DetailedReactHTMLElement<any, HTMLElement>, {
+        ref: rightContentRef,
+      }),
+    )
+
+    // return React.cloneElement(rightContent as React.DetailedReactHTMLElement<any, HTMLElement>, {
+    //   ref: rightContentRef,
+    // })
+  }
+
+  const props = {
+    onTouchStart: handleTouchStart,
+    onTouchMove: handleTouchMove,
+    onTouchEnd: handleTouchEnd,
+  }
+  return (
+    <div aria-label="list item" role="listitem" {...(swipe ? props : {})} className={computedClassNames}>
+      {children}
+      {rightContent && renderRightContent()}
+    </div>
+  )
+}
+List.Item = ListItem
 export default List

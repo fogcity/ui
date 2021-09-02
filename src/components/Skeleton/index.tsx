@@ -8,26 +8,27 @@ type SkeletonProps = {
   circle?: boolean
   width?: string
   height?: string
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
-type RuleNames = 'skeleton' | 'skeleton-circle' | '@keyframes loading'
+type RuleNames = 'skeleton' | '@keyframes loading'
 const useStyles = createUseStyles<RuleNames, SkeletonProps, Theme>((theme) => ({
-  skeleton: (props) => ({
-    minHeight: '2em',
-    borderRadius: '4px',
+  skeleton: ({ cssOptions, circle, height, width, delay, duration }) => ({
+    width: width,
+    height: height,
+    borderRadius: circle ? '50%' : '4px',
     background:
       'linear-gradient(90deg,rgba(255, 255, 255, 0) 40%,rgba(255, 255, 255, .5) 50%,rgba(255, 255, 255, 0) 60%) ' +
-        theme?.color?.greyLight || '#F3F4F6',
+      theme
+        ? theme.mode == 'light'
+          ? theme.color.greyLight
+          : theme.color.grey
+        : '#F3F4F6',
     backgroundSize: '200% 100%',
     backgroundPositionX: '180%',
-    animation: props.duration + 's $loading ease-in-out infinite',
-    animationDelay: props.delay + 's',
+    animation: `${duration}s $loading  ${delay}s ease-in-out infinite`,
+    ...cssOptions,
   }),
-  'skeleton-circle': (props) => ({
-    width: props.width,
-    height: props.height,
-    border: '1px solid ' + theme?.color?.greyLight || '#F3F4F6',
-    borderRadius: '50%',
-  }),
+
   '@keyframes loading': {
     to: {
       backgroundPositionX: '-20%',
@@ -38,21 +39,22 @@ const Skeleton = ({
   duration = 1,
   delay = 0,
   circle = false,
-  style,
+  cssOptions,
   width,
-  height,
+  height = '100%',
   className,
   ...props
-}: SkeletonProps & React.ComponentProps<'div'>) => {
+}: SkeletonProps & React.ComponentPropsWithoutRef<'div'>) => {
   const classes = useStyles({
     duration,
     delay,
     height,
+    circle,
     width,
+    cssOptions,
   })
   const computedClassNames = classnames(classes.skeleton, className)
-  const cnsCircle = classnames(classes.skeleton, classes['skeleton-circle'], className)
-  return <div data-testid="skeleton" className={circle ? cnsCircle : computedClassNames} {...props} />
+  return <div aria-label="skeleton" className={computedClassNames} {...props} />
 }
 
 export default Skeleton

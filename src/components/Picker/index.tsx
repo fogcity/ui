@@ -13,7 +13,7 @@ type PickerProps = {
   data: PickerItem[][]
   onPickerChange: (item: PickerItem[]) => any
   value: string[]
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 type RuleNames = 'picker'
 const useStyles = createUseStyles<RuleNames, Pick<PickerProps, 'cssOptions'> & { translateYlength: number[] }, Theme>(
@@ -25,7 +25,7 @@ const useStyles = createUseStyles<RuleNames, Pick<PickerProps, 'cssOptions'> & {
         flexDirection: 'column',
         minHeight: '10em',
         cursor: 'grab',
-        ...cssOptions,
+        ...cssOptions?.(theme),
         '& > .container': {
           display: 'flex',
           justifyContent: 'center',
@@ -92,7 +92,7 @@ const Picker = ({
   children,
   cssOptions,
   ...props
-}: PickerProps & React.ComponentProps<'div'>) => {
+}: PickerProps & React.ComponentPropsWithoutRef<'div'>) => {
   const [currentKey, setCurrentKey] = useState(value || data.map((v) => v[0].key))
   const [max, setMax] = useState(data.map((v) => v.length - 1))
   const [min, setMin] = useState(data.map((v) => v.length - 1 - v.length * 2))

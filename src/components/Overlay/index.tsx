@@ -3,42 +3,58 @@ import classnames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Theme } from '../../constants/theme'
 
-interface OverlayProps {
-  color?: string
+type OverlayProps = Partial<{
+  color: string
   show: boolean
-  blur?: boolean
-  opacity?: string | number
-  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-  cssOptions?: React.CSSProperties
-  className?: string
-}
+  blur: boolean
+  opacity: string | number
+  children: React.ReactNode
+  noAnimation: boolean
+  onClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  cssOptions: (theme: Theme) => React.CSSProperties
+  className: string
+}>
 
 type RuleNames = 'overlay'
 
 const useStyles = createUseStyles<RuleNames, Omit<OverlayProps, 'onClick'>, Theme>((theme) => ({
-  overlay: ({ cssOptions, color, blur, opacity, show }) => ({
+  overlay: ({ cssOptions, noAnimation, color, blur, opacity, show }) => ({
     position: 'fixed',
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-    background: color || 'rgba(0,0,0,0.48)',
+    background: color || theme?.color?.greyLight || '#F3F4F6',
     backdropFilter: blur ? 'blur(4px)' : '',
     zIndex: theme.zIndex?.overlay,
     opacity: 0,
-    transition: 'all .4s',
+    transition: noAnimation ? 'all .4s' : '',
     ...(show ? { opacity: opacity } : { display: 'none' }),
-    ...cssOptions,
+    ...cssOptions?.(theme),
   }),
 }))
 
-const Overlay = ({ opacity = 1, blur = false, color, show = false, onClick, cssOptions, className }: OverlayProps) => {
-  const classes = useStyles({ show, blur, color, opacity, cssOptions })
+const Overlay = ({
+  opacity = 1,
+  noAnimation = false,
+  blur = false,
+  color,
+  show = false,
+  children,
+  onClick,
+  cssOptions,
+  className,
+}: OverlayProps) => {
+  const classes = useStyles({ noAnimation,show, blur, color, opacity, cssOptions })
   const computedOverlayClassNames = classnames(classes.overlay, className)
   const handleClickOverlay = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onClick?.(e)
   }
-  return <aside className={computedOverlayClassNames} onClick={handleClickOverlay} />
+  return (
+    <aside className={computedOverlayClassNames} onClick={handleClickOverlay}>
+      {children}
+    </aside>
+  )
 }
 
 export default Overlay

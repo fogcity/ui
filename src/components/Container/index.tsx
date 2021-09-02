@@ -11,16 +11,14 @@ type ContainerProps = {
   relative?: boolean
   fullHeight?: boolean
   sticky?: boolean
-  scroll?: boolean
   fullScreen?: boolean
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 
 type RuleNames = 'container'
 
 const useStyles = createUseStyles<RuleNames, ContainerProps, Theme>((theme) => ({
   container: ({
-    scroll,
     noPadding,
     fullScreen,
     padding,
@@ -39,7 +37,6 @@ const useStyles = createUseStyles<RuleNames, ContainerProps, Theme>((theme) => (
     else paddingComputed = padding
     return {
       height: fullScreen ? '100vh' : fullHeight ? '100%' : 'auto',
-      overflow: scroll ? 'auto' : '',
       padding: paddingComputed,
       ...(sticky && {
         position: 'sticky',
@@ -47,7 +44,7 @@ const useStyles = createUseStyles<RuleNames, ContainerProps, Theme>((theme) => (
       }),
       ...(relative && { position: 'relative' }),
       ...(absolute && { position: 'absolute' }),
-      ...cssOptions,
+      ...cssOptions?.(theme),
     }
   },
 }))
@@ -61,14 +58,13 @@ const Container = ({
   relative = false,
   fullScreen = false,
   sticky = false,
-  scroll,
+
   cssOptions,
   className,
   children,
   ...props
 }: ContainerProps & React.ComponentPropsWithoutRef<'div'>) => {
   const classes = useStyles({
-    scroll,
     noPadding,
     padding,
     noYPadding,
@@ -86,7 +82,6 @@ const Container = ({
       [`${className}`]: true,
     },
   )
-  console.log(computedClassNames)
 
   return (
     <div className={computedClassNames} {...props}>

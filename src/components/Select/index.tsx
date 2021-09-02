@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import * as React from 'react'
+import React, { useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Theme } from '../../constants/theme'
@@ -28,7 +27,7 @@ interface SelectProps {
       value: string | number
     }[],
   ) => any
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 
 const useStyles = createUseStyles<RuleNames, Pick<SelectProps, 'cssOptions'>, Theme>((theme) => ({
@@ -50,7 +49,7 @@ const Select = ({ value, onSelectChange, data, open, onClose, children, classNam
     onClose()
   }
   return (
-    <Drawer height="14em" position="bottom" open={open} onClose={handleClickDrawer} className={computedClassNames}>
+    <Drawer position="bottom" open={open} onClose={handleClickDrawer} className={computedClassNames}>
       <div
         style={{
           borderTopRightRadius: '8px',
@@ -58,9 +57,9 @@ const Select = ({ value, onSelectChange, data, open, onClose, children, classNam
         }}
       >
         <Picker
-          cssOptions={{
+          cssOptions={() => ({
             background: 'white',
-          }}
+          })}
           value={value}
           onPickerChange={handleSelectedChange}
           data={data}

@@ -11,7 +11,7 @@ interface GridProps {
   col?: number
   rowGap?: string
   colGap?: string
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 
 const useStyles = createUseStyles<RuleNames, GridProps, Theme>((theme) => ({
@@ -22,7 +22,7 @@ const useStyles = createUseStyles<RuleNames, GridProps, Theme>((theme) => ({
     gridColumnGap: colGap,
     gridRowGap: rowGap,
     ...props,
-    ...cssOptions,
+    ...cssOptions?.(theme),
   }),
 }))
 

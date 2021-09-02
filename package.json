@@ -1,7 +1,7 @@
 {
-  "name": "xkits-components",
+  "name": "gaudi",
   "version": "0.1.2",
-  "description": "A mobile react tool library",
+  "description": "The component design that a good react application should have",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fogcity/components.git"
+    "url": "git+https://github.com/fogcity/gaudi.git"
   },
   "keywords": [
     "react",
@@ -31,12 +31,12 @@
     "typescript"
   ],
   "author": {
-    "name": "trevor",
+    "name": "obito",
     "email": "xymzhs@gmail.com"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fogcity/components/issues"
+    "url": "https://github.com/fogcity/gaudi/issues"
   },
   "size-limit": [
     {
@@ -44,7 +44,7 @@
       "limit": "15 KB"
     }
   ],
-  "homepage": "https://github.com/fogcity/components#readme",
+  "homepage": "https://github.com/fogcity/gaudi#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",

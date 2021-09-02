@@ -1,12 +1,10 @@
-import * as React from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Theme } from '../../constants/theme'
-type RuleNames = 'row'
 
 type RowAlign = 'start' | 'center' | 'end' | 'baseline' | 'stretch'
 type RowJustify = 'start' | 'center' | 'end' | 'space-around' | 'space-between'
-
+type RuleNames = 'row'
 interface RowProps {
   vertical?: boolean
   alignItems?: RowAlign
@@ -14,20 +12,19 @@ interface RowProps {
   gap?: string
   wrap?: boolean
   fullHeight?: boolean
-  cssOptions?: React.CSSProperties
+  cssOptions?: (theme: Theme) => React.CSSProperties
 }
 
 const useStyles = createUseStyles<RuleNames, RowProps, Theme>((theme) => ({
-  row: ({ vertical, wrap, cssOptions, fullHeight, alignItems, ...props }) => ({
+  row: ({ vertical, wrap, cssOptions, fullHeight, alignItems, gap }) => ({
     display: 'flex',
     width: '100%',
-    // color: "transparent",
     flexDirection: vertical ? 'column' : 'row',
-    height: fullHeight ? '100%' : 'auto',
-    gridGap: props?.gap,
-    ...props,
-    ...cssOptions,
+    height: fullHeight ? '100%' : 'initial',
+    gridGap: gap,
+
     ...(vertical ? {} : { alignItems, flexWrap: wrap ? 'wrap' : 'nowrap' }),
+    ...cssOptions?.(theme),
   }),
 }))
 
@@ -41,7 +38,7 @@ const Row = ({
   cssOptions,
   children,
   className,
-  ...restProps
+  ...props
 }: RowProps & React.ComponentPropsWithoutRef<'div'>) => {
   const classes = useStyles({
     fullHeight,
@@ -53,9 +50,8 @@ const Row = ({
     cssOptions,
   })
   const computedClassNames = classnames(classes.row, className)
-  const childClasses = classnames('')
   return (
-    <div className={computedClassNames} {...restProps}>
+    <div className={computedClassNames} {...props}>
       {children}
     </div>
   )

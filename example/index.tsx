@@ -1,17 +1,27 @@
-import { useState } from 'react'
+import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { App, Container, Switch, Button, Card, Carousel } from '../src'
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+import { App, Container, MonthPicker, Upload, TimePicker, Card, NumberInput } from '../src'
+
 const Main = () => {
-  const [show, setShow] = useState(false)
+  const [on, setOn] = React.useState(true)
+
+  const data = [1, 2, 3, 4, 5, 9, 6, 7, 8]
   return (
     <App>
-      <Container fullScreen>
-        <Carousel onChange={(i) => console.log(i)}>
-          {data.map((v) => (
-            <div>{v}</div>
-          ))}
-        </Carousel>
+      <Container fullScreen relative>
+        <Card
+          cssOptions={() => ({
+            padding: '1em',
+            height: '200px',
+          })}
+        >
+          <MonthPicker
+            onChange={(v) => {
+              console.log(v)
+            }}
+          />
+          <Upload />
+        </Card>
       </Container>
     </App>
   )
