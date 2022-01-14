@@ -27,6 +27,7 @@ const Modal = ({
   className,
 }: ModalProps) => {
   const theme = useTheme() as Theme;
+
   const mountAnim = keyframes(
     animationType == 'fade'
       ? {
@@ -50,6 +51,7 @@ const Modal = ({
         }
       : {},
   );
+
   const unmountAnim = keyframes(
     animationType == 'fade'
       ? {
@@ -73,17 +75,25 @@ const Modal = ({
         }
       : {},
   );
+
   const styles = css({
     '& > *:first-child': {
       animation: `${visible ? mountAnim : unmountAnim} .3s`,
     },
     ...(typeof co == 'function' ? co(theme) : co),
   });
+
   const computedModalClassNames = clsx(className);
 
   return (
     <Overlay
-      onClick={shy ? handleModalVisibleChange : () => {}}
+      onClick={
+        shy
+          ? handleModalVisibleChange
+          : () => {
+              // empty func
+            }
+      }
       css={styles}
       opacity={opacity || 0}
       visible={visible}

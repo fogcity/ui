@@ -114,7 +114,8 @@ function deepMerge(target: any, source: any) {
   return target;
 }
 
-function debounce(fn: Function, delay: number = 500): Function {
+// eslint-disable-next-line @typescript-eslint/ban-types
+function debounce(fn: Function, delay = 500): Function {
   let timer: any;
   return function (this: any, ...args: any) {
     if (timer) clearTimeout(timer);

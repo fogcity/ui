@@ -31,4 +31,4 @@ module.exports = {
       version: 'detect',
     },
   },
-}
+};
