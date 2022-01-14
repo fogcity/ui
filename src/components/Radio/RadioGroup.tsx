@@ -43,7 +43,9 @@ const RadioGroup = ({ disabled = false, onChange, children, value, co }: CheckBo
         check: v => {
           setValue(v);
         },
-        uncheck: () => {},
+        uncheck: () => {
+          // empty func
+        },
         disabled: disabled,
       }}>
       {children}

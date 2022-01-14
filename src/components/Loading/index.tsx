@@ -9,7 +9,7 @@ type LoadingProps = {
   duration?: string;
   className?: string;
   width?: string;
-  backgroudColor?: ((theme: Theme) => string) | string;
+  backgroundColor?: ((theme: Theme) => string) | string;
   color?: ((theme: Theme) => string) | string;
   borderWidth?: string;
   co?: ((theme: Theme) => React.CSSProperties) | React.CSSProperties;
@@ -20,7 +20,7 @@ const Loading = ({
   width = '4em',
   borderWidth = '2px',
   color = '#555',
-  backgroudColor = '#f3f3f3',
+  backgroundColor: backgroundColor = '#f3f3f3',
   bit = false,
   co,
   className,
@@ -43,9 +43,11 @@ const Loading = ({
     },
   });
   const styles = css({
-    '& .nomal': {
-      border: `${borderWidth} solid ${typeof backgroudColor == 'string' ? backgroudColor : backgroudColor?.(theme)}`,
-      borderTop: `${borderWidth} solid ${typeof color == 'function' ? (color as Function)(theme) : color}`,
+    '& .normal': {
+      border: `${borderWidth} solid ${typeof backgroundColor == 'string' ? backgroundColor : backgroundColor?.(theme)}`,
+      borderTop: `${borderWidth} solid ${
+        typeof color == 'function' ? (color as (theme: Theme) => string)(theme) : color
+      }`,
       borderRadius: '50%',
       width: width,
       height: width,
@@ -132,7 +134,7 @@ const Loading = ({
   return (
     <div css={styles} className={computedClassNames}>
       {!bit ? (
-        <div className={`nomal`} />
+        <div className={`normal`} />
       ) : (
         <div className={`bit`}>
           <span />

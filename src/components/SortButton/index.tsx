@@ -26,9 +26,9 @@ const SortButton = ({
   const primary = color ? color : theme.color.primary;
   const gray = '#979797';
   const [count, setCount] = useState<number>(state || 0);
-  let [titleColor, setTitleColor] = useState<string | undefined>('black');
-  let [color1, setColor1] = useState<string | undefined>(gray);
-  let [color2, setColor2] = useState<string | undefined>(gray);
+  const [titleColor, setTitleColor] = useState<string | undefined>('black');
+  const [color1, setColor1] = useState<string | undefined>(gray);
+  const [color2, setColor2] = useState<string | undefined>(gray);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (event) {
       if (count === 0) {

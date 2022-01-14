@@ -64,7 +64,9 @@ const Swiper = ({
 
   useEffect(() => {
     if (autoPlay) {
-      const iv = setInterval(() => {}, delay);
+      const iv = setInterval(() => {
+        // empty func
+      }, delay);
       return clearInterval(iv);
     }
   }, []);

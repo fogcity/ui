@@ -17,7 +17,7 @@ type Theme = {
   shadow: {
     color: string;
   };
-  system: {};
+  system: Record<string, unknown>;
   color: {
     primary: string;
     secondary: string;
