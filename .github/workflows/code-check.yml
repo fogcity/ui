@@ -1,0 +1,27 @@
+name: eslint-check
+
+on: 
+  # runs on every push、PR、PR-review
+  - push
+  - pull_request
+
+jobs: 
+  lint: 
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # 设置pnpm包管理器，[参考文档](https://github.com/pnpm/action-setup)
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.0.2
+      
+      - name: Install dependencies using pnpm
+        run: pnpm i
+
+      - name: Run eslint 
+        run: pnpm lint
+
+      - name: Run test
+        run: pnpm test
