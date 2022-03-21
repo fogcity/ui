@@ -26,7 +26,7 @@ import {
   Navigation,
   Overlay,
   Image,
-} from './build';
+} from '../src';
 const Main = () => {
   const ref = useRef();
   const [drawerOpen, setDrawerOpen] = useState(false);
