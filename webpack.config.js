@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: path.join(__dirname, './src/index.ts'),
+  entry: path.join(__dirname, 'src/index.ts'),
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   resolve: {
     extensions: ['.js', '.json', '.ts', '.tsx'],
@@ -18,9 +18,8 @@ module.exports = {
     },
   },
   devServer: {
-    static: path.join(__dirname, 'example'),
-    compress: true,
-    historyApiFallback: true,
+    static: path.join(__dirname, '/dist'),
+    port: 9000,
   },
   devtool: 'source-map',
   module: {

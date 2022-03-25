@@ -9,7 +9,7 @@
   ],
   "typings": "dist/index.d.ts",
   "scripts": {
-    "start": "concurrently --kill-others \"webpack serve\"",
+    "start": "concurrently --kill-others \"webpack serve --open\"",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "build:prod": "cross-env NODE_ENV=production && npm run lint && npm run test && webpack",
     "test": "jest",
